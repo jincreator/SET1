@@ -37,11 +37,11 @@ import java.awt.event.ActionEvent;
 public class Titan {
 	
 	String planet[]={
-			"呪jjjjjjjjjjjjjjjjjjjjjjjjj失",
-			"ば",
-			"ず",
-			"そ",
-			"し"
+			"qqqq",
+			"qqq",
+			"qqqq",
+			"wwwww",
+			"fegsdfgssg"
 	};
 	
 	String row[][]={{"d","d","d"},
