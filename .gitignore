@@ -1,2 +1,31 @@
-.gradle
-build/
+# -*- mode: gitignore; -*-
+
+# Gradle
+/.gradle
+/build/
+# Gradle GUI
+/gradle-app.setting
+# Gradle Wrapper
+/gradlew
+/gradlew.bat
+/gradle/
+
+# Eclipse
+/.classpath
+/.project
+/.settings/
+/bin/
+
+# Netbeans
+/.nb-gradle/
+
+# IDEA
+/.idea/
+/*.iml
+
+# Emacs
+*~
+\#*\#
+
+# VIM
+[._]*.s[a-w][a-z]
