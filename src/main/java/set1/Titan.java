@@ -55,7 +55,7 @@ public class Titan {
 	/**
 	 * Launch the application.
 	 */
-	public void launchTitan {
+	public void launchTitan() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
