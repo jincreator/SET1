@@ -1,7 +1,6 @@
 package set1;
 
-import java.awt.EventQueue;
-
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -9,21 +8,36 @@ import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JSeparator;
+
 import java.awt.BorderLayout;
-import javax.swing.JList;
+
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.JTree;
+
+import java.awt.EventQueue;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+
+import set1.data.DSM;
+import set1.data.IncompleteDataException;
+import set1.data.WrongCharacterException;
+
 
 public class Titan {
 
-	String planet[] = { "entity_1", "entity_2", "entity_3" };
+	private String planet[] = { "entity_1", "entity_2", "entity_3" };
 
-	String row[][] = { { "", "1", "2", "3" }, { "entity_1", "-", "", "1" },
+	private String row[][] = { { "", "1", "2", "3" }, { "entity_1", "-", "", "1" },
 			{ "entity_2", "", "", "" }, { "entity_3", "", "", "-" } };
-	String col[] = { "s", "s", "s", "s" };
+	private String col[] = { "s", "s", "s", "s" };
 
 	private JFrame frmTitan;
 	private JTable table;
+	private JTree tree;
+
+	private DSM dsm;
 
 	/**
 	 * Launch the application.
@@ -42,9 +56,18 @@ public class Titan {
 	}
 
 	/**
+	 * TODO refresh
+	 */
+	private void refresh() {
+		// TODO update table data
+		table.repaint();
+	}
+
+	/**
 	 * Create the application.
 	 */
 	public Titan() {
+		dsm = new DSM();
 		initialize();
 	}
 
@@ -70,6 +93,22 @@ public class Titan {
 		mnF.add(mntmNewMenuItem_newDSM);
 
 		JMenuItem mntmNewMenuItem = new JMenuItem("Open DSM");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				int returnVal = fc.showOpenDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					try {
+						dsm.updateFromFile(fc.getSelectedFile().getAbsolutePath());
+						refresh();
+					} catch (IOException | IncompleteDataException
+							| WrongCharacterException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
 		mntmNewMenuItem
 				.setIcon(new ImageIcon(
 						Titan.class
@@ -126,12 +165,22 @@ public class Titan {
 		mnF.add(separator_2);
 
 		JMenuItem mntmNewMenuItem_6 = new JMenuItem("exit");
+		mntmNewMenuItem_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 		mnF.add(mntmNewMenuItem_6);
 
 		JMenu mnNewMenu_1 = new JMenu("View");
 		menuBar.add(mnNewMenu_1);
 
 		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Redraw");
+		mntmNewMenuItem_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				refresh();
+			}
+		});
 		mntmNewMenuItem_5
 				.setIcon(new ImageIcon(
 						Titan.class
@@ -164,11 +213,10 @@ public class Titan {
 		JSplitPane splitPane = new JSplitPane();
 		frmTitan.getContentPane().add(splitPane, BorderLayout.CENTER);
 
-		JList<String> list = new JList(planet); // FIXME JList generic이
-												// WindowBuilder에서 안됨
-		splitPane.setLeftComponent(list);
-
 		table = new JTable(row, col);
 		splitPane.setRightComponent(table);
+
+		tree = new JTree(planet);
+		splitPane.setLeftComponent(tree);
 	}
 }
