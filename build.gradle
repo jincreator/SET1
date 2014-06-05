@@ -3,12 +3,22 @@ apply plugin: 'application'
 
 sourceCompatibility = 1.8
 version = 0.0
-mainClassName = "set1.Main"
+mainClassName = "set1.Titan"
 
 jar {
     manifest {
         attributes("Implementation-Title": "SET1", "Implementation-Version": version)
     }
+}
+
+tasks.withType(Compile) {
+    options.encoding = 'UTF-8'
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
+    options.docEncoding = 'UTF-8'
+    options.charSet = 'UTF-8'
 }
 
 repositories {
