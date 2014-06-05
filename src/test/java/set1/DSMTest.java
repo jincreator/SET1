@@ -29,18 +29,16 @@ public class DSMTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertTrue("Length of DSM name", dsm.getNameMatrix().size() == 35);
-		assertTrue("Length of DSM data", dsm.getDataMatrix().size() == 35);
+		assertTrue("Length of DSM name", dsm.getNameMatrix().length == 35);
+		assertTrue("Length of DSM data", dsm.getDataMatrix().length == 35);
 		assertTrue(
 				"DSM first name",
-				dsm.getNameMatrix()
-						.get(0)
+				dsm.getNameMatrix()[0]
 						.equals("edu.drexel.cs.rise.titan.action.cluster.SaveAction"));
-		assertTrue(
-				"DSM last name",
-				dsm.getNameMatrix().get(34)
+		assertTrue("DSM last name",
+				dsm.getNameMatrix()[34]
 						.equals("edu.drexel.cs.rise.titan.model.MatrixModel"));
-		assertTrue("DSM 0 data", dsm.getDataMatrix().get(0).get(0) == false);
-		assertTrue("DSM 1 data", dsm.getDataMatrix().get(34).get(25) == true);
+		assertTrue("DSM 0 data", dsm.getDataMatrix()[0][0] == false);
+		assertTrue("DSM 1 data", dsm.getDataMatrix()[34][25] == true);
 	}
 }
