@@ -7,7 +7,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import set1.Titan;
-import set1.action.ExpandAll.EventHandler;
 
 public class CollapseAll {
 	public JButton CollapseAll = new JButton("");

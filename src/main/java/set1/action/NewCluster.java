@@ -8,7 +8,6 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 
 import set1.Titan;
-import set1.action.OpenDSM.EventHandler;
 
 public class NewCluster {
 	public JMenuItem FileNewClustering = new JMenuItem("New Clustering");
