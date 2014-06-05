@@ -1,57 +1,62 @@
 package set1;
 
-import javax.swing.JFileChooser;
+
+import java.awt.EventQueue;
+
+import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
+import javax.swing.JPopupMenu;
+
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JSeparator;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+
+import java.awt.Choice;
+
+import javax.swing.JToolBar;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JTree;
+import javax.swing.JPanel;
+import javax.swing.JButton;
 
-import java.awt.EventQueue;
+import java.awt.Color;
+
+import javax.swing.Box;
+
+import java.awt.Font;
+
+import javax.swing.SwingConstants;
+
+import java.awt.Button;
+
+import javax.swing.JPasswordField;
+import javax.swing.JSplitPane;
+import javax.swing.JScrollPane;
+
+import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 
-import set1.data.DSM;
-import set1.data.IncompleteDataException;
-import set1.data.WrongCharacterException;
+import javax.swing.JTree;
+import javax.swing.JTable;
 
+import set1.action.*;
 
 public class Titan {
-
-	private String planet[] = { "entity_1", "entity_2", "entity_3" };
-
-	private String row[][] = { { "", "1", "2", "3" }, { "entity_1", "-", "", "1" },
-			{ "entity_2", "", "", "" }, { "entity_3", "", "", "-" } };
-	private String col[] = { "s", "s", "s", "s" };
-
-	private JFrame frmTitan;
+	public JFrame frmTitan;
 	private JTable table;
-	private JTree tree;
-
-	private DSM dsm;
-
 	/**
 	 * Launch the application.
 	 */
-	public void launchTitan() {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -63,169 +68,117 @@ public class Titan {
 			}
 		});
 	}
-
-	/**
-	 * TODO refresh
-	 */
-	private void refresh() {
-		// TODO update table data
-		table.repaint();
-	}
-
 	/**
 	 * Create the application.
 	 */
 	public Titan() {
-		dsm = new DSM();
 		initialize();
 	}
-
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-
 		frmTitan = new JFrame();
-		frmTitan.setTitle("Titan-1\uC870");
-		frmTitan.setBounds(100, 100, 654, 538);
+		frmTitan.setTitle("소프트웨어 공학 1조");
+		frmTitan.setBounds(100, 100, 800, 600);
 		frmTitan.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		
 		JMenuBar menuBar = new JMenuBar();
 		frmTitan.setJMenuBar(menuBar);
-
-		JMenu mnF = new JMenu("File");
-		menuBar.add(mnF);
-
-		JMenuItem mntmNewMenuItem_newDSM = new JMenuItem("New DSM");
-		mntmNewMenuItem_newDSM.setIcon(new ImageIcon(Titan.class
-				.getResource("/javax/swing/plaf/metal/icons/ocean/file.gif")));
-		mnF.add(mntmNewMenuItem_newDSM);
-
-		JMenuItem mntmNewMenuItem = new JMenuItem("Open DSM");
-		mntmNewMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser();
-				int returnVal = fc.showOpenDialog(null);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					try {
-						dsm.updateFromFile(fc.getSelectedFile().getAbsolutePath());
-						refresh();
-					} catch (IOException | IncompleteDataException
-							| WrongCharacterException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-			}
-		});
-		mntmNewMenuItem
-				.setIcon(new ImageIcon(
-						Titan.class
-								.getResource("/com/sun/javafx/scene/web/skin/Copy_16x16_JFX.png")));
-		mnF.add(mntmNewMenuItem);
-
-		JMenuItem mntmNewMenuItem_saveDSM = new JMenuItem("Save DSM");
-		mntmNewMenuItem_saveDSM
-				.setIcon(new ImageIcon(
-						Titan.class
-								.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
-		mnF.add(mntmNewMenuItem_saveDSM);
-
-		JMenuItem mntmNewMenuItem_saveDSMAs = new JMenuItem("Save DSM As...");
-		mntmNewMenuItem_saveDSMAs
-				.setIcon(new ImageIcon(
-						Titan.class
-								.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
-		mnF.add(mntmNewMenuItem_saveDSMAs);
-
+		//file menu-------------------------------------------
+		JMenu FIle = new JMenu("File");
+		menuBar.add(FIle);
+		NewDSM ND =new NewDSM();
+		FIle.add(ND.NewDSM);
+		OpenDSM OD =new OpenDSM();
+		FIle.add(OD.FileOpenDSM);
 		JSeparator separator = new JSeparator();
-		mnF.add(separator);
-
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("New Clustering");
-		mntmNewMenuItem_1.setIcon(new ImageIcon(Titan.class
-				.getResource("/javax/swing/plaf/metal/icons/ocean/file.gif")));
-		mnF.add(mntmNewMenuItem_1);
-
-		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Load Clustering");
-		mntmNewMenuItem_2
-				.setIcon(new ImageIcon(
-						Titan.class
-								.getResource("/com/sun/java/swing/plaf/windows/icons/TreeClosed.gif")));
-		mnF.add(mntmNewMenuItem_2);
-
+		FIle.add(separator);
+		NewCluster NC=new NewCluster();
+		FIle.add(NC.FileNewClustering);
+		LoadCluster LC=new LoadCluster();
+		FIle.add(LC.FileLoadClustering);
 		JSeparator separator_1 = new JSeparator();
-		mnF.add(separator_1);
-
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Save Clustering");
-		mntmNewMenuItem_3
-				.setIcon(new ImageIcon(
-						Titan.class
-								.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
-		mnF.add(mntmNewMenuItem_3);
-
-		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Save Clustering As");
-		mntmNewMenuItem_4
-				.setIcon(new ImageIcon(
-						Titan.class
-								.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
-		mnF.add(mntmNewMenuItem_4);
-
+		FIle.add(separator_1);
+		SaveCluster SC=new SaveCluster();
+		FIle.add(SC.FileSaveClustering);
+		SaveClusterAs SCA=new SaveClusterAs();
+		FIle.add(SCA.FileSaveClusteringAs);
 		JSeparator separator_2 = new JSeparator();
-		mnF.add(separator_2);
-
-		JMenuItem mntmNewMenuItem_6 = new JMenuItem("exit");
-		mntmNewMenuItem_6.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		mnF.add(mntmNewMenuItem_6);
-
-		JMenu mnNewMenu_1 = new JMenu("View");
-		menuBar.add(mnNewMenu_1);
-
-		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Redraw");
-		mntmNewMenuItem_5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				refresh();
-			}
-		});
-		mntmNewMenuItem_5
-				.setIcon(new ImageIcon(
-						Titan.class
-								.getResource("/com/sun/javafx/scene/web/skin/FontBackgroundColor_16x16_JFX.png")));
-		mnNewMenu_1.add(mntmNewMenuItem_5);
-
-		JSeparator separator_5 = new JSeparator();
-		mnNewMenu_1.add(separator_5);
-
-		JMenuItem mntmNewMenuItem_7 = new JMenuItem("Find");
-		mnNewMenu_1.add(mntmNewMenuItem_7);
-
-		JSeparator separator_6 = new JSeparator();
-		mnNewMenu_1.add(separator_6);
-
-		JCheckBoxMenuItem chckbxmntmShowLowLabels = new JCheckBoxMenuItem(
-				"Show Low Labels");
-		mnNewMenu_1.add(chckbxmntmShowLowLabels);
-
-		JCheckBoxMenuItem chckbxmntmNewCheckItem = new JCheckBoxMenuItem(
-				"Show Dependency Strength");
-		mnNewMenu_1.add(chckbxmntmNewCheckItem);
-
-		JMenu mnNewMenu_2 = new JMenu("Help");
-		menuBar.add(mnNewMenu_2);
-
-		JMenuItem mntmAbout = new JMenuItem("About");
-		mnNewMenu_2.add(mntmAbout);
-
+		FIle.add(separator_2);
+		Exit Ex = new Exit();
+		FIle.add(Ex.Exit);
+		//View ---------------------------------------------
+		JMenu View = new JMenu("View");
+		menuBar.add(View);
+		Redraw Re = new Redraw();
+		View.add(Re.ViewRedraw);
+		ShowLowLabel SLL = new ShowLowLabel();
+		View.add(SLL.ShowLowLabels);
+		//Help-----------------------------------------------
+		JMenu Help = new JMenu("Help");
+		menuBar.add(Help);
+		About Ab= new About();
+		Help.add(Ab.About);
+		//Toolbar--------------------------------------------
+		JToolBar toolBar = new JToolBar();
+		frmTitan.getContentPane().add(toolBar, BorderLayout.NORTH);
+		toolBar.add(OD.OpenDSM);
+		toolBar.add(Re.Redraw);
+		toolBar.add(NC.NewCluster);
+		toolBar.add(LC.LoadCluster);
+		toolBar.add(SC.SaveCluster);
+		toolBar.add(SCA.SaveClusterAs);
+		
 		JSplitPane splitPane = new JSplitPane();
 		frmTitan.getContentPane().add(splitPane, BorderLayout.CENTER);
+		//왼쪽판넬----------------------------------------------
+		JScrollPane scrollPane = new JScrollPane();
+		splitPane.setLeftComponent(scrollPane);
+		JToolBar toolBar_1 = new JToolBar();
+		scrollPane.setColumnHeaderView(toolBar_1);
+		//툴바------------------------------------------------
+		ExpandAll EA=new ExpandAll();
+		toolBar_1.add(EA.ExpandAll);
+		CollapseAll CA=new CollapseAll();
+		toolBar_1.add(CA.CollapseAll);
+		Group G=new Group();
+		toolBar_1.add(G.Group);
+		UnGroup UG=new UnGroup();
+		toolBar_1.add(UG.UnGroup);
+		MoveUp MU=new MoveUp();
+		toolBar_1.add(MU.MoveUp);
+		MoveDown MD=new MoveDown();
+		toolBar_1.add(MD.MoveDown);
+		//트리-----------------------------------------------
+		JTree tree = new JTree();
+		scrollPane.setViewportView(tree);
+		//오른쪽 판넬-------------------------------------------
+		JScrollPane scrollPane_1 = new JScrollPane();
+		splitPane.setRightComponent(scrollPane_1);
+		//테이블----------------------------------------------
+		table = new JTable();
+		scrollPane_1.setViewportView(table);
+		}
 
-		table = new JTable(row, col);
-		splitPane.setRightComponent(table);
-
-		tree = new JTree(planet);
-		splitPane.setLeftComponent(tree);
+	
+	
+	
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
 	}
 }
