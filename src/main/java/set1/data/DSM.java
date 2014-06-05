@@ -112,23 +112,29 @@ public class DSM {
 	}
 
 	/**
-	 * 이름이 들어있는 ArrayList를 줍니다.
+	 * 이름이 들어있는 배열을 줍니다.
 	 * 
 	 * @return nameMatrix
 	 * @see #getDataMatrix()
 	 */
-	public ArrayList<String> getNameMatrix() {
-		return new ArrayList<String>(nameMatrix);
+	public String[] getNameMatrix() {
+		return (String[])nameMatrix.toArray(new String[0]);
 	}
 
 	/**
-	 * 데이터가 들어있는 ArrayList를 줍니다.
+	 * 데이터가 들어있는 배열을 줍니다.
 	 * 
 	 * @return dataMatrix
 	 * @see #getNameMatrix()
 	 */
-	public ArrayList<ArrayList<Boolean>> getDataMatrix() {
-		return new ArrayList<ArrayList<Boolean>>(dataMatrix);
+	public Boolean[][] getDataMatrix() {
+		Boolean[][] retDataMatrix = new Boolean[dataMatrix.size()][dataMatrix.size()];
+		for(int i = 0; i < dataMatrix.size(); i++) {
+			for(int j = 0; j < dataMatrix.size(); j++) {
+				retDataMatrix[i][j] = dataMatrix.get(i).get(j);
+			}
+		}
+		return retDataMatrix;
 	}
 
 	/**
