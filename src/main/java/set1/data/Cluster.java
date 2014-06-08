@@ -33,10 +33,10 @@ public class Cluster {
 	public Cluster() {
 		tree = new DefaultMutableTreeNode("$root");
 	}
-	
+
 	public Cluster(String[] nameArray) {
 		this();
-		for(String name : nameArray)
+		for (String name : nameArray)
 			tree.add(new DefaultMutableTreeNode(name));
 	}
 
@@ -128,7 +128,7 @@ public class Cluster {
 	 * @see #updateFromFile(String)
 	 */
 	public void writeToFile(String path) {
-		//TODO
+		// TODO
 	}
 
 	/**
@@ -136,5 +136,12 @@ public class Cluster {
 	 */
 	public DefaultMutableTreeNode getTree() {
 		return tree;
+	}
+
+	/**
+	 * 새 노드를 $root 아래에 넣습니다.
+	 */
+	public void addRow(String rowName) {
+		tree.add(new DefaultMutableTreeNode(rowName));
 	}
 }

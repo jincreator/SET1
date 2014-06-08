@@ -305,6 +305,7 @@ public class Titan {
 			public void actionPerformed(ActionEvent e) {
 				String input = JOptionPane.showInputDialog("Enter New Row Name");
 				dsm.addRow(input);
+				cluster.addRow(input);
 			}
 		});
 		NewDsmRow
