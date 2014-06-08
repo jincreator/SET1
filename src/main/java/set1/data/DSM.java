@@ -19,10 +19,23 @@ public class DSM extends AbstractTableModel {
 
 	private ArrayList<ArrayList<Boolean>> dataMatrix;
 	private ArrayList<String> nameMatrix;
+	private Boolean isLabel;
 
 	public DSM() {
 		dataMatrix = new ArrayList<ArrayList<Boolean>>();
 		nameMatrix = new ArrayList<String>();
+		isLabel = true;
+	}
+
+	public DSM(int num) {
+		this();
+		for(int i = 0; i < num; i++) {
+			nameMatrix.add("entity_" + String.valueOf(i + 1));
+			ArrayList<Boolean> dataArrayList = new ArrayList<Boolean>();
+			for(int j = 0; j < num; j++)
+				dataArrayList.add(false);
+			dataMatrix.add(dataArrayList);
+		}
 	}
 
 	/**
@@ -216,6 +229,21 @@ public class DSM extends AbstractTableModel {
 		}
 	}
 	
+	public void addRow(String rowName) {
+		nameMatrix.add(rowName);
+		ArrayList<Boolean> newDataArrayList = new ArrayList<Boolean>();
+		for(ArrayList<Boolean> dataArrayList : dataMatrix) {
+			dataArrayList.add(false);
+			newDataArrayList.add(false);
+		}
+		newDataArrayList.add(false);
+		dataMatrix.add(newDataArrayList);
+	}
+
+	public void setLabel(Boolean isLabel) {
+		this.isLabel = isLabel;
+	}
+
 	@Override
 	public int getRowCount() {
 		return nameMatrix.size();
@@ -242,6 +270,9 @@ public class DSM extends AbstractTableModel {
 			else
 				return ' ';
 		} else
-			return String.valueOf(rowIndex + 1) + ". " + nameMatrix.get(rowIndex);
+			if (isLabel)
+				return String.valueOf(rowIndex + 1) + ". " + nameMatrix.get(rowIndex);
+			else
+				return String.valueOf(rowIndex + 1);
 	}
 }
