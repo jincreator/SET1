@@ -211,7 +211,7 @@ public class Titan {
 		JButton Redraw = new JButton("");
 		Redraw.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-					table = new JTable(dsm.getDataMatrix(),dsm.getNameMatrix());
+					table = new JTable(dsm);
 					scrollPane2.setViewportView(table);
 					System.out.print("33");
 			}
