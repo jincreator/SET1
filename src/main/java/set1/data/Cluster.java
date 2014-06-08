@@ -33,6 +33,12 @@ public class Cluster {
 	public Cluster() {
 		tree = new DefaultMutableTreeNode("$root");
 	}
+	
+	public Cluster(String[] nameArray) {
+		this();
+		for(String name : nameArray)
+			tree.add(new DefaultMutableTreeNode(name));
+	}
 
 	/**
 	 * 파일을 읽어 Cluster Object를 만듭니다.

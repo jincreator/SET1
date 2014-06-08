@@ -34,6 +34,7 @@ import java.io.IOException;
 import javax.swing.JTree;
 import javax.swing.JTable;
 
+import set1.data.Cluster;
 import set1.data.DSM;
 import set1.data.IncompleteDataException;
 import set1.data.WrongCharacterException;
@@ -41,12 +42,11 @@ import set1.data.WrongCharacterException;
 public class Titan {
 	public static JFrame frmTitan;
 	private JTable table;
+	private JTree tree;
 	private DSM dsm;
-	private JScrollPane scrollPane2;
-	public String col[] = {"김", "김","김"};       
-    public String data[][] = {{"김", "24", "3"},            
-                       {"김", "2","3"},
-                       {"3", "24", "3"}};
+	private JScrollPane scrollPane, scrollPane2;
+	private Cluster cluster;
+
 	/**
 	 * Launch the application.
 	 */
@@ -66,13 +66,14 @@ public class Titan {
 	 * Create the application.
 	 */
 	public Titan() {
+		dsm = new DSM();
+		cluster = new Cluster();
 		initialize();
 	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		dsm = new DSM();
 		frmTitan = new JFrame();
 		frmTitan.setTitle("소프트웨어 공학 1조");
 		frmTitan.setBounds(100, 100, 800, 600);
@@ -105,12 +106,10 @@ public class Titan {
 				JFileChooser fc = new JFileChooser();
 				int returnVal = fc.showOpenDialog(null);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-
 					try {
 						dsm.updateFromFile(fc.getSelectedFile()
 								.getAbsolutePath());
-						table = new JTable(dsm.getDataMatrix(), dsm.getNameMatrix());
-						table.repaint();
+						cluster = new Cluster(dsm.getNameMatrix());
 					} catch (IOException | IncompleteDataException
 							| WrongCharacterException e) {
 						// TODO Auto-generated catch block
@@ -202,7 +201,7 @@ public class Titan {
 		JButton OpenDSM = new JButton("");
 		OpenDSM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				col[0]="0";
+				; //TODO
 			}
 		});
 		OpenDSM.setToolTipText("OpenDSM");
@@ -215,8 +214,9 @@ public class Titan {
 			public void actionPerformed(ActionEvent arg0) {
 					dsm.setLabel(ShowLowLabels.getState());
 					table = new JTable(dsm);
+					tree = new JTree(cluster.getTree());
+					scrollPane.setViewportView(tree);
 					scrollPane2.setViewportView(table);
-					System.out.print("33");
 			}
 		});
 		// 리페인트
@@ -257,7 +257,7 @@ public class Titan {
 		frmTitan.getContentPane().add(splitPane, BorderLayout.CENTER);
 		splitPane.setDividerLocation(230);
 		// 왼쪽판넬----------------------------------------------
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
 		JToolBar toolBar_1 = new JToolBar();
 		scrollPane.setColumnHeaderView(toolBar_1);
@@ -314,7 +314,7 @@ public class Titan {
 		NewDsmRow.setToolTipText("NewDsmRow");
 		toolBar_1.add(NewDsmRow);
 		// 트리-----------------------------------------------
-		JTree tree = new JTree();
+		tree = new JTree(cluster.getTree());
 		scrollPane.setViewportView(tree);
 		// 오른쪽 판넬-------------------------------------------
 		scrollPane2 = new JScrollPane();
