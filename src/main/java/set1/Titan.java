@@ -86,7 +86,9 @@ public class Titan {
 		JMenuItem NewDSM = new JMenuItem("New DSM");
 		NewDSM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String Input = JOptionPane.showInputDialog("input Number");
+				String input = JOptionPane.showInputDialog("Enter Row Number:");
+				if (input != null)
+					dsm = new DSM(Integer.parseInt(input));
 			}
 		});
 		NewDSM.setIcon(new ImageIcon(
@@ -211,6 +213,7 @@ public class Titan {
 		JButton Redraw = new JButton("");
 		Redraw.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+					dsm.setLabel(ShowLowLabels.getState());
 					table = new JTable(dsm);
 					scrollPane2.setViewportView(table);
 					System.out.print("33");
