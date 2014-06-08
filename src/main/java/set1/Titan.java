@@ -313,6 +313,12 @@ public class Titan {
 		scrollPane.setColumnHeaderView(toolBar_1);
 		// 툴바------------------------------------------------
 		JButton ExpandAll = new JButton("");
+		ExpandAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (int i = 0; i < tree.getRowCount(); i++)
+					tree.expandRow(i); // TODO for 없이...
+			}
+		});
 		ExpandAll
 				.setIcon(new ImageIcon(
 						Titan.class
@@ -320,6 +326,11 @@ public class Titan {
 		ExpandAll.setToolTipText("ExpandAll");
 		toolBar_1.add(ExpandAll);
 		JButton CollapseAll = new JButton("");
+		CollapseAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tree.collapsePath(tree.getPathForRow(0));
+			}
+		});
 		CollapseAll.setToolTipText("CollapseAll");
 		CollapseAll
 				.setIcon(new ImageIcon(
