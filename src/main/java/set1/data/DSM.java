@@ -228,6 +228,17 @@ public class DSM extends AbstractTableModel {
 			}
 		}
 	}
+	
+	public void addRow(String rowName) {
+		nameMatrix.add(rowName);
+		ArrayList<Boolean> newDataArrayList = new ArrayList<Boolean>();
+		for(ArrayList<Boolean> dataArrayList : dataMatrix) {
+			dataArrayList.add(false);
+			newDataArrayList.add(false);
+		}
+		newDataArrayList.add(false);
+		dataMatrix.add(newDataArrayList);
+	}
 
 	public void setLabel(Boolean isLabel) {
 		this.isLabel = isLabel;

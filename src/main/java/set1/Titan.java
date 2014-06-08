@@ -300,13 +300,19 @@ public class Titan {
 		MoveDown.setToolTipText("MoveDown");
 		toolBar_1.add(MoveDown);
 
-		JButton NewDsmLow = new JButton("");
-		NewDsmLow
+		JButton NewDsmRow = new JButton("");
+		NewDsmRow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String input = JOptionPane.showInputDialog("Enter New Row Name");
+				dsm.addRow(input);
+			}
+		});
+		NewDsmRow
 				.setIcon(new ImageIcon(
 						Titan.class
 								.getResource("/com/sun/javafx/scene/web/skin/IncreaseIndent_16x16_JFX.png")));
-		NewDsmLow.setToolTipText("NewDsmLow");
-		toolBar_1.add(NewDsmLow);
+		NewDsmRow.setToolTipText("NewDsmRow");
+		toolBar_1.add(NewDsmRow);
 		// 트리-----------------------------------------------
 		JTree tree = new JTree();
 		scrollPane.setViewportView(tree);
