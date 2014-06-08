@@ -8,12 +8,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.swing.table.AbstractTableModel;
+
 /**
  * DSM을 관리합니다.
  * 
  * @author 이진규
  */
-public class DSM {
+public class DSM extends AbstractTableModel {
 
 	private ArrayList<ArrayList<Boolean>> dataMatrix;
 	private ArrayList<String> nameMatrix;
@@ -112,23 +114,29 @@ public class DSM {
 	}
 
 	/**
-	 * 이름이 들어있는 ArrayList를 줍니다.
+	 * 이름이 들어있는 배열을 줍니다.
 	 * 
 	 * @return nameMatrix
 	 * @see #getDataMatrix()
 	 */
-	public ArrayList<String> getNameMatrix() {
-		return new ArrayList<String>(nameMatrix);
+	public String[] getNameMatrix() {
+		return (String[])nameMatrix.toArray(new String[0]);
 	}
 
 	/**
-	 * 데이터가 들어있는 ArrayList를 줍니다.
+	 * 데이터가 들어있는 배열을 줍니다.
 	 * 
 	 * @return dataMatrix
 	 * @see #getNameMatrix()
 	 */
-	public ArrayList<ArrayList<Boolean>> getDataMatrix() {
-		return new ArrayList<ArrayList<Boolean>>(dataMatrix);
+	public Boolean[][] getDataMatrix() {
+		Boolean[][] retDataMatrix = new Boolean[dataMatrix.size()][dataMatrix.size()];
+		for(int i = 0; i < dataMatrix.size(); i++) {
+			for(int j = 0; j < dataMatrix.size(); j++) {
+				retDataMatrix[i][j] = dataMatrix.get(i).get(j);
+			}
+		}
+		return retDataMatrix;
 	}
 
 	/**
@@ -206,5 +214,34 @@ public class DSM {
 					bw.newLine();
 			}
 		}
+	}
+	
+	@Override
+	public int getRowCount() {
+		return nameMatrix.size();
+	}
+
+	@Override
+	public int getColumnCount() {
+		return nameMatrix.size() + 1;
+	}
+
+	@Override
+	public String getColumnName(int columnIndex) {
+		if (columnIndex == 0)
+			return "";
+		else
+			return String.valueOf(columnIndex);
+	}
+	
+	@Override
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		if (columnIndex != 0) {
+			if (dataMatrix.get(rowIndex).get(columnIndex - 1) == true)
+				return 'X';
+			else
+				return ' ';
+		} else
+			return String.valueOf(rowIndex + 1) + ". " + nameMatrix.get(rowIndex);
 	}
 }

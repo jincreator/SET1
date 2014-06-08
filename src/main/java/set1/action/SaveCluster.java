@@ -8,7 +8,6 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 
 import set1.Titan;
-import set1.action.LoadCluster.EventHandler;
 
 public class SaveCluster {
 	public JMenuItem FileSaveClustering = new JMenuItem("Save Clustering");
