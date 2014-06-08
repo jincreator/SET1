@@ -88,8 +88,10 @@ public class Titan {
 		NewDSM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String input = JOptionPane.showInputDialog("Enter Row Number:");
-				if (input != null)
+				if (input != null) {
 					dsm = new DSM(Integer.parseInt(input));
+					cluster = new Cluster(dsm.getNameMatrix());
+				}
 			}
 		});
 		NewDSM.setIcon(new ImageIcon(
