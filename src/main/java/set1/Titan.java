@@ -43,6 +43,10 @@ public class Titan {
 	private JTable table;
 	private DSM dsm;
 	private JScrollPane scrollPane2;
+	public String col[] = {"김", "김","김"};       
+    public String data[][] = {{"김", "24", "3"},            
+                       {"김", "2","3"},
+                       {"3", "24", "3"}};
 	/**
 	 * Launch the application.
 	 */
@@ -113,7 +117,6 @@ public class Titan {
 					
 				}
 			}
-			
 		});
 		FileOpenDSM
 				.setIcon(new ImageIcon(
@@ -195,18 +198,26 @@ public class Titan {
 		JToolBar toolBar = new JToolBar();
 		frmTitan.getContentPane().add(toolBar, BorderLayout.NORTH);
 		JButton OpenDSM = new JButton("");
+		OpenDSM.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				col[0]="0";
+			}
+		});
 		OpenDSM.setToolTipText("OpenDSM");
 		OpenDSM.setIcon(new ImageIcon(
 				Titan.class
 						.getResource("/com/sun/javafx/scene/web/skin/Paste_16x16_JFX.png")));
 		toolBar.add(OpenDSM);
 		JButton Redraw = new JButton("");
-		// 리페인트
 		Redraw.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//System.out.println(dsm.getDataMatrix().length);
+					table = new JTable(dsm.getDataMatrix(),dsm.getNameMatrix());
+					scrollPane2.setViewportView(table);
+					System.out.print("33");
 			}
 		});
+		// 리페인트
+		
 		Redraw.setToolTipText("Redraw");
 		Redraw.setIcon(new ImageIcon(
 				Titan.class
@@ -299,12 +310,7 @@ public class Titan {
 		// 오른쪽 판넬-------------------------------------------
 		scrollPane2 = new JScrollPane();
 		splitPane.setRightComponent(scrollPane2);
-		// 테이블----------------------------------------------
-		table = new JTable(dsm.getDataMatrix(), dsm.getNameMatrix());
-		scrollPane2.setViewportView(table);
-
-		JButton button = new JButton("New button");
-		scrollPane2.setColumnHeaderView(button);
+		// 리페인트 리스너 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
