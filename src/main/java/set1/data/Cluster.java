@@ -140,6 +140,9 @@ public class Cluster {
 
 	/**
 	 * 새 노드를 $root 아래에 넣습니다.
+	 * 
+	 * @param rowName
+	 *            새 노드의 이름
 	 */
 	public void addRow(String rowName) {
 		tree.add(new DefaultMutableTreeNode(rowName));

@@ -35,6 +35,8 @@ import javax.swing.JTree;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import set1.data.Cluster;
 import set1.data.DSM;
@@ -49,6 +51,14 @@ public class Titan {
 	private JScrollPane scrollPane, scrollPane2;
 	private Cluster cluster;
 	private String currentDSMFilePath;
+
+	public void showError(String message) {
+		JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+	}
+
+	public String getInput(String message) {
+		return JOptionPane.showInputDialog(message);
+	}
 
 	/**
 	 * Launch the application.
@@ -292,7 +302,7 @@ public class Titan {
 
 		JSplitPane splitPane = new JSplitPane();
 		frmTitan.getContentPane().add(splitPane, BorderLayout.CENTER);
-		splitPane.setDividerLocation(230);
+		splitPane.setDividerLocation(280);
 		// 왼쪽판넬----------------------------------------------
 		scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
@@ -345,6 +355,41 @@ public class Titan {
 				cluster.addRow(input);
 			}
 		});
+		
+		JButton ReName = new JButton("");
+		ReName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TreePath[] tp = tree.getSelectionPaths();
+				if(tp.length != 1) {
+					showError("Please select one node!");
+				} else {
+					String name = getInput("Enter new node name:");
+					DefaultMutableTreeNode node = (DefaultMutableTreeNode)tp[0].getLastPathComponent();
+					dsm.changeRowName(node.toString(), name);
+					node.setUserObject(name); //TODO 일단 땜방
+					tree.updateUI();
+				}
+			}
+		});
+		ReName.setIcon(new ImageIcon(Titan.class.getResource("/com/sun/javafx/scene/web/skin/FontColor_16x16_JFX.png")));
+		ReName.setToolTipText("Rename");
+		toolBar_1.add(ReName);
+		
+		JButton Delete = new JButton("");
+		Delete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TreePath[] tpList = tree.getSelectionPaths();
+				for(TreePath tp : tpList) {
+					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp.getLastPathComponent();
+					dsm.removeRowName(node.toString());
+					node.removeFromParent();
+				}
+				tree.updateUI();
+			}
+		});
+		Delete.setIcon(new ImageIcon(Titan.class.getResource("/javax/swing/plaf/metal/icons/ocean/close.gif")));
+		Delete.setToolTipText("Delete");
+		toolBar_1.add(Delete);
 		NewDsmRow
 				.setIcon(new ImageIcon(
 						Titan.class

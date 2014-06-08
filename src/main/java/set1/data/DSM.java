@@ -243,6 +243,20 @@ public class DSM extends AbstractTableModel {
 	public void setLabel(Boolean isLabel) {
 		this.isLabel = isLabel;
 	}
+	
+	public void changeRowName(String originalName, String changedName) {
+		int index = nameMatrix.indexOf(originalName);
+		if (index >= 0) //TODO originalName이 없을때 exception
+			nameMatrix.set(index, changedName);
+	}
+
+	public void removeRowName(String name) {
+		int index = nameMatrix.indexOf(name);
+		for(ArrayList<Boolean> dataList : dataMatrix)
+			dataList.remove(index);
+		dataMatrix.remove(index);
+		nameMatrix.remove(index);
+	}
 
 	@Override
 	public int getRowCount() {
