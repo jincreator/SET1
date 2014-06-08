@@ -7,7 +7,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import set1.Titan;
-import set1.action.Group.EventHandler;
 
 public class UnGroup {
 	public JButton UnGroup = new JButton("");

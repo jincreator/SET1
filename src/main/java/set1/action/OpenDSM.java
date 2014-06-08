@@ -1,14 +1,13 @@
 package set1.action;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 
 import set1.Titan;
 public class OpenDSM {
+	
 	public JMenuItem FileOpenDSM = new JMenuItem("Open DSM");
 	public JButton OpenDSM = new JButton("");
 	public OpenDSM(){
@@ -21,6 +20,7 @@ public class OpenDSM {
 	class EventHandler implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			System.out.print("ddddffffffd");
+		
 		}
 	}
 }

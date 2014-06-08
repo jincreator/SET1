@@ -6,7 +6,6 @@ import set1.Titan;
 import java.awt.event.ActionListener;
 
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 public class About {
 	Titan i;
 	//this.i = i;

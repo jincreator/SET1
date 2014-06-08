@@ -7,7 +7,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import set1.Titan;
-import set1.action.CollapseAll.EventHandler;
 
 public class Group {
 	public JButton Group = new JButton("");
