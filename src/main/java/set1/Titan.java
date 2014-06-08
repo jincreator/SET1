@@ -33,7 +33,6 @@ import java.io.IOException;
 
 import javax.swing.JTree;
 import javax.swing.JTable;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -53,7 +52,8 @@ public class Titan {
 	private String currentDSMFilePath;
 
 	public void showError(String message) {
-		JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, message, "Error",
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	public String getInput(String message) {
@@ -75,15 +75,17 @@ public class Titan {
 			}
 		});
 	}
+
 	/**
 	 * Create the application.
 	 */
 	public Titan() {
 		dsm = new DSM();
 		cluster = new Cluster();
-		currentDSMFilePath = ""; //TODO: 현재폴더 쓰기.
+		currentDSMFilePath = ""; // TODO: 현재폴더 쓰기.
 		initialize();
 	}
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -127,13 +129,14 @@ public class Titan {
 						dsm.updateFromFile(fc.getSelectedFile()
 								.getAbsolutePath());
 						cluster = new Cluster(dsm.getNameMatrix());
-						currentDSMFilePath = fc.getSelectedFile().getAbsolutePath();
+						currentDSMFilePath = fc.getSelectedFile()
+								.getAbsolutePath();
 					} catch (IOException | IncompleteDataException
 							| WrongCharacterException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
+
 				}
 			}
 		});
@@ -164,11 +167,11 @@ public class Titan {
 		FileSaveDSMAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fc = new JFileChooser();
-				fc.setDialogType(JFileChooser.SAVE_DIALOG); //TODO: 근데 안바뀜...
+				fc.setDialogType(JFileChooser.SAVE_DIALOG); // TODO: 근데 안바뀜...
 				fc.setFileFilter(new FileNameExtensionFilter("DSM file", "dsm"));
 				int returnVal = fc.showOpenDialog(null);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					try { //TODO: .dsm 안붙으면 붙게...
+					try { // TODO: .dsm 안붙으면 붙게...
 						dsm.writeToFile(fc.getSelectedFile().getAbsolutePath());
 						currentDSMFilePath = fc.getSelectedFile()
 								.getAbsolutePath();
@@ -205,7 +208,7 @@ public class Titan {
 				fileName = savedsm.getDirectory() + savedsm.getFile();
 			}
 		});
-		
+
 		JMenuItem FileSaveClustering = new JMenuItem("Save Clustering");
 		FIle.add(FileSaveClustering);
 		FileSaveClusteringAs
@@ -248,7 +251,7 @@ public class Titan {
 		JButton OpenDSM = new JButton("");
 		OpenDSM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				; //TODO
+				; // TODO
 			}
 		});
 		OpenDSM.setToolTipText("OpenDSM");
@@ -259,15 +262,15 @@ public class Titan {
 		JButton Redraw = new JButton("");
 		Redraw.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-					dsm.setLabel(ShowLowLabels.getState());
-					table = new JTable(dsm);
-					tree = new JTree(cluster.getTree());
-					scrollPane.setViewportView(tree);
-					scrollPane2.setViewportView(table);
+				dsm.setLabel(ShowLowLabels.getState());
+				table = new JTable(dsm);
+				tree = new JTree(cluster.getTree());
+				scrollPane.setViewportView(tree);
+				scrollPane2.setViewportView(table);
 			}
 		});
 		// 리페인트
-		
+
 		Redraw.setToolTipText("Redraw");
 		Redraw.setIcon(new ImageIcon(
 				Titan.class
@@ -324,11 +327,55 @@ public class Titan {
 								.getResource("/javax/swing/plaf/metal/icons/ocean/collapsed.gif")));
 		toolBar_1.add(CollapseAll);
 		JButton Group = new JButton("");
+		Group.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TreePath[] tpList = tree.getSelectionPaths();
+				if (tpList.length != 0) {
+					DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(
+							getInput("Enter group name"));
+					DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) tpList[0]
+							.getLastPathComponent();
+					DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) firstNode
+							.getParent();
+					int index = parentNode.getIndex(firstNode);
+					for (TreePath tp : tpList) {
+						DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp
+								.getLastPathComponent();
+						node.removeFromParent();
+						groupNode.add(node);
+					}
+					parentNode.insert(groupNode, index);
+				}
+				tree.updateUI();
+			}
+		});
 		Group.setToolTipText("Group");
 		Group.setIcon(new ImageIcon(Titan.class
 				.getResource("/javax/swing/plaf/metal/icons/ocean/menu.gif")));
 		toolBar_1.add(Group);
 		JButton UnGroup = new JButton("");
+		UnGroup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TreePath[] tpList = tree.getSelectionPaths();
+				if (tpList.length == 1) {
+					DefaultMutableTreeNode groupNode = (DefaultMutableTreeNode) tpList[0]
+							.getLastPathComponent();
+					DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) groupNode
+							.getParent();
+					int index = parentNode.getIndex(groupNode);
+					int length = groupNode.getChildCount();
+					for (int i = 0; i < length; i++) {
+						DefaultMutableTreeNode node = (DefaultMutableTreeNode) groupNode
+								.getFirstChild();
+						node.removeFromParent();
+						parentNode.insert(node, index + i);
+					}
+					groupNode.removeFromParent();
+					;
+				}
+				tree.updateUI();
+			}
+		});
 		UnGroup.setToolTipText("UnGroup");
 		UnGroup.setIcon(new ImageIcon(
 				Titan.class
@@ -350,44 +397,54 @@ public class Titan {
 		JButton NewDsmRow = new JButton("");
 		NewDsmRow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String input = JOptionPane.showInputDialog("Enter New Row Name");
+				String input = JOptionPane
+						.showInputDialog("Enter New Row Name");
 				dsm.addRow(input);
 				cluster.addRow(input);
 			}
 		});
-		
+
 		JButton ReName = new JButton("");
 		ReName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TreePath[] tp = tree.getSelectionPaths();
-				if(tp.length != 1) {
+				if (tp.length != 1) {
 					showError("Please select one node!");
 				} else {
 					String name = getInput("Enter new node name:");
-					DefaultMutableTreeNode node = (DefaultMutableTreeNode)tp[0].getLastPathComponent();
+					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp[0]
+							.getLastPathComponent();
 					dsm.changeRowName(node.toString(), name);
-					node.setUserObject(name); //TODO 일단 땜방
+					node.setUserObject(name); // TODO 일단 땜방
 					tree.updateUI();
 				}
 			}
 		});
-		ReName.setIcon(new ImageIcon(Titan.class.getResource("/com/sun/javafx/scene/web/skin/FontColor_16x16_JFX.png")));
+		ReName.setIcon(new ImageIcon(
+				Titan.class
+						.getResource("/com/sun/javafx/scene/web/skin/FontColor_16x16_JFX.png")));
 		ReName.setToolTipText("Rename");
 		toolBar_1.add(ReName);
-		
+
 		JButton Delete = new JButton("");
 		Delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TreePath[] tpList = tree.getSelectionPaths();
-				for(TreePath tp : tpList) {
-					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp.getLastPathComponent();
-					dsm.removeRowName(node.toString());
+				for (TreePath tp : tpList) {
+					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp
+							.getLastPathComponent();
+					try {
+						dsm.removeRowName(node.toString());
+					} catch (ArrayIndexOutOfBoundsException aioofe) {
+						// aioofe.printStackTrace(); //TODO
+					}
 					node.removeFromParent();
 				}
 				tree.updateUI();
 			}
 		});
-		Delete.setIcon(new ImageIcon(Titan.class.getResource("/javax/swing/plaf/metal/icons/ocean/close.gif")));
+		Delete.setIcon(new ImageIcon(Titan.class
+				.getResource("/javax/swing/plaf/metal/icons/ocean/close.gif")));
 		Delete.setToolTipText("Delete");
 		toolBar_1.add(Delete);
 		NewDsmRow
@@ -412,11 +469,13 @@ public class Titan {
 					showMenu(e);
 				}
 			}
+
 			public void mouseReleased(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					showMenu(e);
 				}
 			}
+
 			private void showMenu(MouseEvent e) {
 				popup.show(e.getComponent(), e.getX(), e.getY());
 			}
