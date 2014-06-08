@@ -33,6 +33,8 @@ import java.io.IOException;
 
 import javax.swing.JTree;
 import javax.swing.JTable;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import set1.data.Cluster;
 import set1.data.DSM;
@@ -46,6 +48,7 @@ public class Titan {
 	private DSM dsm;
 	private JScrollPane scrollPane, scrollPane2;
 	private Cluster cluster;
+	private String currentDSMFilePath;
 
 	/**
 	 * Launch the application.
@@ -68,6 +71,7 @@ public class Titan {
 	public Titan() {
 		dsm = new DSM();
 		cluster = new Cluster();
+		currentDSMFilePath = ""; //TODO: 현재폴더 쓰기.
 		initialize();
 	}
 	/**
@@ -106,12 +110,14 @@ public class Titan {
 				// FileDialog(frmTitan,"DSM열기",FileDialog.LOAD);
 				// dsmopen.setVisible(true);
 				JFileChooser fc = new JFileChooser();
+				fc.setFileFilter(new FileNameExtensionFilter("DSM file", "dsm"));
 				int returnVal = fc.showOpenDialog(null);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					try {
 						dsm.updateFromFile(fc.getSelectedFile()
 								.getAbsolutePath());
 						cluster = new Cluster(dsm.getNameMatrix());
+						currentDSMFilePath = fc.getSelectedFile().getAbsolutePath();
 					} catch (IOException | IncompleteDataException
 							| WrongCharacterException e) {
 						// TODO Auto-generated catch block
@@ -126,6 +132,45 @@ public class Titan {
 						Titan.class
 								.getResource("/com/sun/javafx/scene/web/skin/Copy_16x16_JFX.png")));
 		FIle.add(FileOpenDSM);
+		JMenuItem FileSaveDSM = new JMenuItem("Save DSM");
+		FileSaveDSM.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					dsm.writeToFile(currentDSMFilePath);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+
+		FileSaveDSM
+				.setIcon(new ImageIcon(
+						Titan.class
+								.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
+		FIle.add(FileSaveDSM);
+
+		JMenuItem FileSaveDSMAs = new JMenuItem("Save DSM As");
+		FileSaveDSMAs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				fc.setDialogType(JFileChooser.SAVE_DIALOG); //TODO: 근데 안바뀜...
+				fc.setFileFilter(new FileNameExtensionFilter("DSM file", "dsm"));
+				int returnVal = fc.showOpenDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					try { //TODO: .dsm 안붙으면 붙게...
+						dsm.writeToFile(fc.getSelectedFile().getAbsolutePath());
+						currentDSMFilePath = fc.getSelectedFile()
+								.getAbsolutePath();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+				}
+			}
+		});
+		FIle.add(FileSaveDSMAs);
 		JSeparator separator = new JSeparator();
 		FIle.add(separator);
 		JMenuItem FileNewClustering = new JMenuItem("New Clustering");
@@ -137,22 +182,9 @@ public class Titan {
 				.setIcon(new ImageIcon(
 						Titan.class
 								.getResource("/com/sun/java/swing/plaf/windows/icons/TreeClosed.gif")));
+		FIle.add(FileLoadClustering);
 		JSeparator separator_1 = new JSeparator();
 		FIle.add(separator_1);
-		JMenuItem FileSaveClustering = new JMenuItem("Save Clustering");
-		FileSaveClustering.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FileDialog savedsm = new FileDialog(frmTitan, "파일저장",
-						FileDialog.SAVE);
-				savedsm.setVisible(true);
-			}
-		});
-
-		FileSaveClustering
-				.setIcon(new ImageIcon(
-						Titan.class
-								.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
-		FIle.add(FileSaveClustering);
 		JMenuItem FileSaveClusteringAs = new JMenuItem("Save Clustering As");
 		FileSaveClusteringAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -163,6 +195,9 @@ public class Titan {
 				fileName = savedsm.getDirectory() + savedsm.getFile();
 			}
 		});
+		
+		JMenuItem FileSaveClustering = new JMenuItem("Save Clustering");
+		FIle.add(FileSaveClustering);
 		FileSaveClusteringAs
 				.setIcon(new ImageIcon(
 						Titan.class

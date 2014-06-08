@@ -209,7 +209,7 @@ public class DSM extends AbstractTableModel {
 	 */
 	public void writeToFile(String path) throws IOException {
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
-			bw.write(nameMatrix.size());
+			bw.write(String.valueOf(nameMatrix.size()));
 			bw.newLine();
 			for (ArrayList<Boolean> dataLine : dataMatrix) {
 				for (Boolean data : dataLine) {
@@ -223,7 +223,7 @@ public class DSM extends AbstractTableModel {
 			}
 			for (int i = 0; i < nameMatrix.size(); i++) {
 				bw.write(nameMatrix.get(i));
-				if (i == nameMatrix.size() - 1)
+				if (i != nameMatrix.size() - 1)
 					bw.newLine();
 			}
 		}
