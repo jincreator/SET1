@@ -203,8 +203,8 @@ public class Titan extends JFrame {
 		About.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane.showMessageDialog(null,
-						"20115350 선종찬\n 00000000 곽길문\n "
-								+ "00000000 임동빈\n 00000000 이진규", "SE PROJECT",
+						"20115350 선종찬\n 20105801 곽길문\n "
+								+ "20122982 임동빈\n 20111549 이진규", "SE PROJECT",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
