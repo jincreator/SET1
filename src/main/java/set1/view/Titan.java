@@ -13,6 +13,7 @@ import javax.swing.JToolBar;
 import javax.swing.JButton;
 import javax.swing.JSplitPane;
 import javax.swing.JScrollPane;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -25,6 +26,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import set1.control.Controller;
 import set1.model.Cluster;
 import set1.model.DSM;
 import set1.model.IncompleteDataException;
@@ -71,8 +73,10 @@ public class Titan extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String input = JOptionPane.showInputDialog("Enter Row Number:");
 				if (input != null) {
-					dsm = new DSM(Integer.parseInt(input));
-					cluster = new Cluster(dsm.getNameMatrix());
+					Controller controller = new Controller();
+					controller.newDSM(Integer.parseInt(input));
+					dsm = controller.getDSM();
+					cluster = controller.getCluster();
 				}
 			}
 		});
@@ -194,8 +198,7 @@ public class Titan extends JFrame {
 						Titan.class
 								.getResource("/com/sun/javafx/scene/web/skin/FontBackgroundColor_16x16_JFX.png")));
 		View.add(ViewRedraw);
-		JCheckBoxMenuItem ShowRowLabel = new JCheckBoxMenuItem(
-				"Show Row Label");
+		JCheckBoxMenuItem ShowRowLabel = new JCheckBoxMenuItem("Show Row Label");
 		ShowRowLabel.setSelected(true);
 		View.add(ShowRowLabel);
 		// Help-----------------------------------------------
@@ -377,8 +380,10 @@ public class Titan extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String input = JOptionPane
 						.showInputDialog("Enter New Row Name");
-				dsm.addRow(input);
-				cluster.addRow(input);
+				Controller controller = new Controller(dsm, cluster);
+				controller.addRow(input);
+				dsm = controller.getDSM();
+				cluster = controller.getCluster();
 			}
 		});
 
@@ -392,7 +397,10 @@ public class Titan extends JFrame {
 					String name = getInput("Enter new node name:");
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp[0]
 							.getLastPathComponent();
-					dsm.changeRowName(node.toString(), name);
+					Controller controller = new Controller(dsm, cluster);
+					controller.changeRowName(node.toString(), name);
+					dsm = controller.getDSM();
+					cluster = controller.getCluster();
 					node.setUserObject(name); // TODO 일단 땜방
 					tree.updateUI();
 				}
@@ -412,7 +420,10 @@ public class Titan extends JFrame {
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp
 							.getLastPathComponent();
 					try {
-						dsm.removeRowName(node.toString());
+						Controller controller = new Controller(dsm, cluster);
+						controller.removeRowName(node.toString());
+						dsm = controller.getDSM();
+						cluster = controller.getCluster();
 					} catch (ArrayIndexOutOfBoundsException aioofe) {
 						// aioofe.printStackTrace(); //TODO
 					}
