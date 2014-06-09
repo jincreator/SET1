@@ -3,7 +3,7 @@ apply plugin: 'application'
 
 sourceCompatibility = 1.8
 version = 0.0
-mainClassName = "set1.Titan"
+mainClassName = "set1.Main"
 
 jar {
     manifest {

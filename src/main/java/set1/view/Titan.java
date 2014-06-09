@@ -1,7 +1,4 @@
-package set1;
-
-import java.awt.EventQueue;
-import java.awt.FileDialog;
+package set1.view;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -10,22 +7,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-
-import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
-
-import java.awt.BorderLayout;
-
 import javax.swing.JButton;
 import javax.swing.JSplitPane;
 import javax.swing.JScrollPane;
-
+import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
@@ -42,12 +30,11 @@ import set1.model.DSM;
 import set1.model.IncompleteDataException;
 import set1.model.WrongCharacterException;
 
-public class Titan {
-	public static JFrame frmTitan;
+public class Titan extends JFrame {
 	private JTable table;
 	private JTree tree;
-	private DSM dsm;
 	private JScrollPane scrollPane, scrollPane2;
+	private DSM dsm;
 	private Cluster cluster;
 	private String currentDSMFilePath;
 
@@ -61,42 +48,19 @@ public class Titan {
 	}
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Titan window = new Titan();
-					window.frmTitan.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the application.
+	 * Create the application and initialize the contents of the frame.
 	 */
 	public Titan() {
 		dsm = new DSM();
 		cluster = new Cluster();
 		currentDSMFilePath = ""; // TODO: 현재폴더 쓰기.
-		initialize();
-	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frmTitan = new JFrame();
-		frmTitan.setTitle("소프트웨어 공학 1조");
-		frmTitan.setBounds(100, 100, 800, 600);
-		frmTitan.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setTitle("소프트웨어 공학 1조");
+		this.setBounds(100, 100, 800, 600);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JMenuBar menuBar = new JMenuBar();
-		frmTitan.setJMenuBar(menuBar);
+		this.setJMenuBar(menuBar);
 		// file menu-------------------------------------------
 		JMenu FIle = new JMenu("File");
 		menuBar.add(FIle);
@@ -201,11 +165,11 @@ public class Titan {
 		JMenuItem FileSaveClusteringAs = new JMenuItem("Save Clustering As");
 		FileSaveClusteringAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String fileName;
-				FileDialog savedsm = new FileDialog(frmTitan, "파일저장",
-						FileDialog.SAVE);
-				savedsm.setVisible(true);
-				fileName = savedsm.getDirectory() + savedsm.getFile();
+				// String fileName;
+				// FileDialog savedsm = new FileDialog(frmTitan, "파일저장",
+				// FileDialog.SAVE);
+				// savedsm.setVisible(true);
+				// fileName = savedsm.getDirectory() + savedsm.getFile();
 			}
 		});
 
@@ -238,7 +202,7 @@ public class Titan {
 		JMenuItem About = new JMenuItem("About");
 		About.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(frmTitan,
+				JOptionPane.showMessageDialog(null,
 						"20115350 선종찬\n 00000000 곽길문\n "
 								+ "00000000 임동빈\n 00000000 이진규", "SE PROJECT",
 						JOptionPane.INFORMATION_MESSAGE);
@@ -247,7 +211,7 @@ public class Titan {
 		Help.add(About);
 		// Toolbar--------------------------------------------
 		JToolBar toolBar = new JToolBar();
-		frmTitan.getContentPane().add(toolBar, BorderLayout.NORTH);
+		this.getContentPane().add(toolBar, BorderLayout.NORTH);
 		JButton OpenDSM = new JButton("");
 		OpenDSM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -304,7 +268,7 @@ public class Titan {
 		toolBar.add(SaveClusterAs);
 
 		JSplitPane splitPane = new JSplitPane();
-		frmTitan.getContentPane().add(splitPane, BorderLayout.CENTER);
+		this.getContentPane().add(splitPane, BorderLayout.CENTER);
 		splitPane.setDividerLocation(280);
 		// 왼쪽판넬----------------------------------------------
 		scrollPane = new JScrollPane();
@@ -471,25 +435,5 @@ public class Titan {
 		scrollPane2 = new JScrollPane();
 		splitPane.setRightComponent(scrollPane2);
 		// 리페인트 리스너 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	}
-
-	private static void addPopup(Component component, final JPopupMenu popup) {
-		component.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-
-			public void mouseReleased(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-
-			private void showMenu(MouseEvent e) {
-				popup.show(e.getComponent(), e.getX(), e.getY());
-			}
-		});
 	}
 }
