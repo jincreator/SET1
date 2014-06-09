@@ -1,4 +1,4 @@
-package set1.data;
+package set1.model;
 
 import java.io.File;
 import java.io.IOException;

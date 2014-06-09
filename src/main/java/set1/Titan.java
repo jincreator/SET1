@@ -37,10 +37,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import set1.data.Cluster;
-import set1.data.DSM;
-import set1.data.IncompleteDataException;
-import set1.data.WrongCharacterException;
+import set1.model.Cluster;
+import set1.model.DSM;
+import set1.model.IncompleteDataException;
+import set1.model.WrongCharacterException;
 
 public class Titan {
 	public static JFrame frmTitan;

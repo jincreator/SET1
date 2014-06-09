@@ -1,7 +1,7 @@
 /**
  * 
  */
-package set1.data;
+package set1.model;
 
 /**
  * 데이터가 빠져있을 때의 Exception

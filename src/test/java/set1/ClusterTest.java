@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import static org.junit.Assert.*;
-import set1.data.Cluster;
+import set1.model.Cluster;
 
 /**
  * Cluster Unit Test.

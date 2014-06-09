@@ -5,9 +5,9 @@ import java.io.IOException;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import set1.data.DSM;
-import set1.data.IncompleteDataException;
-import set1.data.WrongCharacterException;
+import set1.model.DSM;
+import set1.model.IncompleteDataException;
+import set1.model.WrongCharacterException;
 
 /**
  * DSM Unit Test.

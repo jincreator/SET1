@@ -1,4 +1,4 @@
-package set1.data;
+package set1.model;
 
 import java.util.ArrayList;
 import java.io.BufferedReader;

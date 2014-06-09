@@ -1,4 +1,4 @@
-package set1.data;
+package set1.model;
 
 /**
  * 있으면 안되는 데이터나 글자가 있을 때의 Exception
