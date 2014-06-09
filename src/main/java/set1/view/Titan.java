@@ -36,6 +36,7 @@ public class Titan extends JFrame {
 	private JScrollPane scrollPane, scrollPane2;
 	private DSM dsm;
 	private Cluster cluster;
+	private DSMTableModel dsmTableModel;
 	private String currentDSMFilePath;
 
 	public void showError(String message) {
@@ -53,6 +54,7 @@ public class Titan extends JFrame {
 	public Titan() {
 		dsm = new DSM();
 		cluster = new Cluster();
+		dsmTableModel = new DSMTableModel(dsm, cluster);
 		currentDSMFilePath = ""; // TODO: 현재폴더 쓰기.
 
 		this.setTitle("소프트웨어 공학 1조");
@@ -143,7 +145,6 @@ public class Titan extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-
 				}
 			}
 		});
@@ -193,9 +194,10 @@ public class Titan extends JFrame {
 						Titan.class
 								.getResource("/com/sun/javafx/scene/web/skin/FontBackgroundColor_16x16_JFX.png")));
 		View.add(ViewRedraw);
-		JCheckBoxMenuItem ShowLowLabels = new JCheckBoxMenuItem(
-				"Show Low Labels");
-		View.add(ShowLowLabels);
+		JCheckBoxMenuItem ShowRowLabel = new JCheckBoxMenuItem(
+				"Show Row Label");
+		ShowRowLabel.setSelected(true);
+		View.add(ShowRowLabel);
 		// Help-----------------------------------------------
 		JMenu Help = new JMenu("Help");
 		menuBar.add(Help);
@@ -226,8 +228,9 @@ public class Titan extends JFrame {
 		JButton Redraw = new JButton("");
 		Redraw.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dsm.setLabel(ShowLowLabels.getState());
-				table = new JTable(dsm);
+				dsmTableModel = new DSMTableModel(dsm, cluster, ShowRowLabel
+						.getState());
+				table = new JTable(dsmTableModel);
 				tree = new JTree(cluster.getTree());
 				scrollPane.setViewportView(tree);
 				scrollPane2.setViewportView(table);

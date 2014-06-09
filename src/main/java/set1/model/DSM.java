@@ -8,31 +8,27 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.swing.table.AbstractTableModel;
-
 /**
  * DSM을 관리합니다.
  * 
  * @author 이진규
  */
-public class DSM extends AbstractTableModel {
+public class DSM {
 
 	private ArrayList<ArrayList<Boolean>> dataMatrix;
 	private ArrayList<String> nameMatrix;
-	private Boolean isLabel;
 
 	public DSM() {
 		dataMatrix = new ArrayList<ArrayList<Boolean>>();
 		nameMatrix = new ArrayList<String>();
-		isLabel = true;
 	}
 
 	public DSM(int num) {
 		this();
-		for(int i = 0; i < num; i++) {
+		for (int i = 0; i < num; i++) {
 			nameMatrix.add("entity_" + String.valueOf(i + 1));
 			ArrayList<Boolean> dataArrayList = new ArrayList<Boolean>();
-			for(int j = 0; j < num; j++)
+			for (int j = 0; j < num; j++)
 				dataArrayList.add(false);
 			dataMatrix.add(dataArrayList);
 		}
@@ -133,7 +129,7 @@ public class DSM extends AbstractTableModel {
 	 * @see #getDataMatrix()
 	 */
 	public String[] getNameMatrix() {
-		return (String[])nameMatrix.toArray(new String[0]);
+		return (String[]) nameMatrix.toArray(new String[0]);
 	}
 
 	/**
@@ -143,9 +139,10 @@ public class DSM extends AbstractTableModel {
 	 * @see #getNameMatrix()
 	 */
 	public Boolean[][] getDataMatrix() {
-		Boolean[][] retDataMatrix = new Boolean[dataMatrix.size()][dataMatrix.size()];
-		for(int i = 0; i < dataMatrix.size(); i++) {
-			for(int j = 0; j < dataMatrix.size(); j++) {
+		Boolean[][] retDataMatrix = new Boolean[dataMatrix.size()][dataMatrix
+				.size()];
+		for (int i = 0; i < dataMatrix.size(); i++) {
+			for (int j = 0; j < dataMatrix.size(); j++) {
 				retDataMatrix[i][j] = dataMatrix.get(i).get(j);
 			}
 		}
@@ -228,11 +225,11 @@ public class DSM extends AbstractTableModel {
 			}
 		}
 	}
-	
+
 	public void addRow(String rowName) {
 		nameMatrix.add(rowName);
 		ArrayList<Boolean> newDataArrayList = new ArrayList<Boolean>();
-		for(ArrayList<Boolean> dataArrayList : dataMatrix) {
+		for (ArrayList<Boolean> dataArrayList : dataMatrix) {
 			dataArrayList.add(false);
 			newDataArrayList.add(false);
 		}
@@ -240,53 +237,17 @@ public class DSM extends AbstractTableModel {
 		dataMatrix.add(newDataArrayList);
 	}
 
-	public void setLabel(Boolean isLabel) {
-		this.isLabel = isLabel;
-	}
-	
 	public void changeRowName(String originalName, String changedName) {
 		int index = nameMatrix.indexOf(originalName);
-		if (index >= 0) //TODO originalName이 없을때 exception
+		if (index >= 0) // TODO originalName이 없을때 exception
 			nameMatrix.set(index, changedName);
 	}
 
 	public void removeRowName(String name) {
 		int index = nameMatrix.indexOf(name);
-		for(ArrayList<Boolean> dataList : dataMatrix)
+		for (ArrayList<Boolean> dataList : dataMatrix)
 			dataList.remove(index);
 		dataMatrix.remove(index);
 		nameMatrix.remove(index);
-	}
-
-	@Override
-	public int getRowCount() {
-		return nameMatrix.size();
-	}
-
-	@Override
-	public int getColumnCount() {
-		return nameMatrix.size() + 1;
-	}
-
-	@Override
-	public String getColumnName(int columnIndex) {
-		if (columnIndex == 0)
-			return "";
-		else
-			return String.valueOf(columnIndex);
-	}
-	
-	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		if (columnIndex != 0) {
-			if (dataMatrix.get(rowIndex).get(columnIndex - 1) == true)
-				return 'X';
-			else
-				return ' ';
-		} else
-			if (isLabel)
-				return String.valueOf(rowIndex + 1) + ". " + nameMatrix.get(rowIndex);
-			else
-				return String.valueOf(rowIndex + 1);
 	}
 }
