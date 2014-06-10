@@ -4,6 +4,8 @@ import javax.swing.table.AbstractTableModel;
 
 import set1.model.Cluster;
 import set1.model.DSM;
+import set1.model.IncompleteDataException;
+import set1.model.WrongCharacterException;
 
 public class DSMTableModel extends AbstractTableModel {
 
@@ -16,7 +18,7 @@ public class DSMTableModel extends AbstractTableModel {
 		this.cluster = cluster;
 		this.isLabel = true;
 	}
-	
+
 	public DSMTableModel(DSM dsm, Cluster cluster, Boolean isLabel) {
 		this.dsm = dsm;
 		this.cluster = cluster;
@@ -59,4 +61,29 @@ public class DSMTableModel extends AbstractTableModel {
 			return String.valueOf(rowIndex + 1);
 	}
 
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		return columnIndex != 0;
+	}
+
+	@Override
+	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+		columnIndex--;
+		String inputString = ((String) aValue).replaceAll("\\s+", "");
+		char inputChar;
+		if (!inputString.isEmpty()) {
+			inputChar = inputString.charAt(0);
+			Boolean[][] updatedDataMatrix = dsm.getDataMatrix();
+			if (inputChar == 'X' || inputChar == 'x' || inputChar == '1')
+				updatedDataMatrix[rowIndex][columnIndex] = true;
+			if (inputChar == 'O' || inputChar == 'o' || inputChar == '0')
+				updatedDataMatrix[rowIndex][columnIndex] = false;
+			try {
+				dsm.updateFromArray(dsm.getNameMatrix(), updatedDataMatrix);
+			} catch (IncompleteDataException | WrongCharacterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 }
