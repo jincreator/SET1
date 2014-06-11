@@ -25,6 +25,10 @@ import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.xml.sax.SAXException;
 
 import set1.control.Controller;
 import set1.model.Cluster;
@@ -37,9 +41,10 @@ public class Titan extends JFrame {
 	private JTree tree;
 	private JScrollPane scrollPane, scrollPane2;
 	private DSM dsm;
-	private Cluster cluster;
+	private ClusterTree cluster;
 	private DSMTableModel dsmTableModel;
 	private String currentDSMFilePath;
+	private String currentCLSXFilePath;
 
 	public void showError(String message) {
 		JOptionPane.showMessageDialog(null, message, "Error",
@@ -55,9 +60,10 @@ public class Titan extends JFrame {
 	 */
 	public Titan() {
 		dsm = new DSM();
-		cluster = new Cluster();
+		cluster = new ClusterTree();
 		dsmTableModel = new DSMTableModel(dsm, cluster);
 		currentDSMFilePath = ""; // TODO: 현재폴더 쓰기.
+		currentCLSXFilePath = ""; // TODO: 현재폴더 쓰기.
 
 		this.setTitle("소프트웨어 공학 1조");
 		this.setBounds(100, 100, 800, 600);
@@ -76,7 +82,7 @@ public class Titan extends JFrame {
 					Controller controller = new Controller();
 					controller.newDSM(Integer.parseInt(input));
 					dsm = controller.getDSM();
-					cluster = controller.getCluster();
+					cluster = new ClusterTree(controller.getCluster());
 				}
 			}
 		});
@@ -88,9 +94,6 @@ public class Titan extends JFrame {
 
 		FileOpenDSM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// FileDialog dsmopen = new
-				// FileDialog(frmTitan,"DSM열기",FileDialog.LOAD);
-				// dsmopen.setVisible(true);
 				JFileChooser fc = new JFileChooser();
 				fc.setFileFilter(new FileNameExtensionFilter("DSM file", "dsm"));
 				int returnVal = fc.showOpenDialog(null);
@@ -98,7 +101,7 @@ public class Titan extends JFrame {
 					try {
 						dsm.updateFromFile(fc.getSelectedFile()
 								.getAbsolutePath());
-						cluster = new Cluster(dsm.getNameMatrix());
+						cluster = new ClusterTree(dsm.getNameMatrix());
 						currentDSMFilePath = fc.getSelectedFile()
 								.getAbsolutePath();
 					} catch (IOException | IncompleteDataException
@@ -160,6 +163,27 @@ public class Titan extends JFrame {
 				.getResource("/javax/swing/plaf/metal/icons/ocean/file.gif")));
 		FIle.add(FileNewClustering);
 		JMenuItem FileLoadClustering = new JMenuItem("Load Clustering");
+		FileLoadClustering.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				fc.setFileFilter(new FileNameExtensionFilter("Cluster file",
+						"clsx"));
+				int returnVal = fc.showOpenDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					try {
+						cluster = new ClusterTree(fc.getSelectedFile()
+								.getAbsolutePath());
+						currentCLSXFilePath = fc.getSelectedFile()
+								.getAbsolutePath();
+					} catch (IOException | XPathExpressionException
+							| ParserConfigurationException | SAXException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+				}
+			}
+		});
 		FileLoadClustering
 				.setIcon(new ImageIcon(
 						Titan.class
@@ -167,19 +191,35 @@ public class Titan extends JFrame {
 		FIle.add(FileLoadClustering);
 		JSeparator separator_1 = new JSeparator();
 		FIle.add(separator_1);
+
+		JMenuItem FileSaveClustering = new JMenuItem("Save Clustering");
+		FileSaveClustering.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		FIle.add(FileSaveClustering);
+
 		JMenuItem FileSaveClusteringAs = new JMenuItem("Save Clustering As");
 		FileSaveClusteringAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// String fileName;
-				// FileDialog savedsm = new FileDialog(frmTitan, "파일저장",
-				// FileDialog.SAVE);
-				// savedsm.setVisible(true);
-				// fileName = savedsm.getDirectory() + savedsm.getFile();
+				JFileChooser fc = new JFileChooser();
+				fc.setDialogType(JFileChooser.SAVE_DIALOG); // TODO: 근데 안바뀜...
+				fc.setFileFilter(new FileNameExtensionFilter("Clustering file",
+						"clsx"));
+				int returnVal = fc.showOpenDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					try {
+						cluster.writeToFile(fc.getSelectedFile()
+								.getAbsolutePath());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					currentCLSXFilePath = fc.getSelectedFile()
+							.getAbsolutePath();
+				}
 			}
 		});
-
-		JMenuItem FileSaveClustering = new JMenuItem("Save Clustering");
-		FIle.add(FileSaveClustering);
 		FileSaveClusteringAs
 				.setIcon(new ImageIcon(
 						Titan.class
@@ -234,7 +274,7 @@ public class Titan extends JFrame {
 				dsmTableModel = new DSMTableModel(dsm, cluster, ShowRowLabel
 						.getState());
 				table = new JTable(dsmTableModel);
-				tree = new JTree(cluster.getTree());
+				tree = new JTree(cluster.getDefaultMutableTreeNode());
 				scrollPane.setViewportView(tree);
 				scrollPane2.setViewportView(table);
 			}
@@ -383,7 +423,7 @@ public class Titan extends JFrame {
 				Controller controller = new Controller(dsm, cluster);
 				controller.addRow(input);
 				dsm = controller.getDSM();
-				cluster = controller.getCluster();
+				cluster = new ClusterTree(controller.getCluster());
 			}
 		});
 
@@ -400,7 +440,7 @@ public class Titan extends JFrame {
 					Controller controller = new Controller(dsm, cluster);
 					controller.changeRowName(node.toString(), name);
 					dsm = controller.getDSM();
-					cluster = controller.getCluster();
+					cluster = new ClusterTree(controller.getCluster());
 					node.setUserObject(name); // TODO 일단 땜방
 					tree.updateUI();
 				}
@@ -423,7 +463,7 @@ public class Titan extends JFrame {
 						Controller controller = new Controller(dsm, cluster);
 						controller.removeRowName(node.toString());
 						dsm = controller.getDSM();
-						cluster = controller.getCluster();
+						cluster = new ClusterTree(controller.getCluster());
 					} catch (ArrayIndexOutOfBoundsException aioofe) {
 						// aioofe.printStackTrace(); //TODO
 					}
@@ -443,7 +483,7 @@ public class Titan extends JFrame {
 		NewDsmRow.setToolTipText("NewDsmRow");
 		toolBar_1.add(NewDsmRow);
 		// 트리-----------------------------------------------
-		tree = new JTree(cluster.getTree());
+		tree = new JTree(cluster.getDefaultMutableTreeNode());
 		scrollPane.setViewportView(tree);
 		// 오른쪽 판넬-------------------------------------------
 		scrollPane2 = new JScrollPane();

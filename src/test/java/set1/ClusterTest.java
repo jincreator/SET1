@@ -31,6 +31,6 @@ public class ClusterTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertTrue("Root Node Name", cluster.getTree().toString().equals("$root"));
+		assertTrue("Root Node Name", cluster.getDocument().getDocumentElement().getLastChild().getAttributes().getNamedItem("name").getNodeValue().equals("$root"));
 	}
 }
