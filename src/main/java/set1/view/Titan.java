@@ -441,7 +441,6 @@ public class Titan extends JFrame {
 					controller.changeRowName(node.toString(), name);
 					dsm = controller.getDSM();
 					cluster = new ClusterTree(controller.getCluster());
-					node.setUserObject(name); // TODO 일단 땜방
 					tree.updateUI();
 				}
 			}

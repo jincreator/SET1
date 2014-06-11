@@ -40,5 +40,7 @@ public class DSMTest {
 						.equals("edu.drexel.cs.rise.titan.model.MatrixModel"));
 		assertTrue("DSM 0 data", dsm.getDataMatrix()[0][0] == false);
 		assertTrue("DSM 1 data", dsm.getDataMatrix()[34][25] == true);
+		assertTrue("hasRow edu.drexel.cs.rise.titan.action.cluster.SaveAction", dsm.hasRow("edu.drexel.cs.rise.titan.action.cluster.SaveAction"));
+		assertFalse("hasRow kr.ac.cau.cse.titan", dsm.hasRow("kr.ac.cau.cse.titan"));
 	}
 }

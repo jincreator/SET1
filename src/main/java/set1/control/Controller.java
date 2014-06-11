@@ -46,11 +46,13 @@ public class Controller {
 
 	public void changeRowName(String originalName, String changedName) {
 		dsm.changeRowName(originalName, changedName);
+		cluster.changeRowName(originalName, changedName);
 		// TODO cluster
 	}
 
 	public void removeRowName(String name) {
-		dsm.removeRowName(name);
-		// TODO cluster
+		String[] rowNameList = cluster.removeRowName(name);
+		for(String rowName : rowNameList)
+			dsm.removeRowName(rowName);
 	}
 }

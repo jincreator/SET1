@@ -226,6 +226,10 @@ public class DSM {
 		}
 	}
 
+	public Boolean hasRow(String rowName) {
+		return nameMatrix.contains(rowName);
+	}
+	
 	public void addRow(String rowName) {
 		nameMatrix.add(rowName);
 		ArrayList<Boolean> newDataArrayList = new ArrayList<Boolean>();

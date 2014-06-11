@@ -187,4 +187,44 @@ public class Cluster {
 	public Document getDocument() {
 		return document;
 	}
+
+	public void changeRowName(String originalName, String changedName) {
+		try {
+			XPathExpression targetXPath = XPathFactory.newInstance().newXPath()
+					.compile("//*[@name='" + originalName + "']");
+			Node targetNode = (Node) targetXPath.evaluate(document,
+					XPathConstants.NODE);
+			Node changedItem = targetNode.getAttributes().getNamedItem("name");
+			changedItem.setNodeValue(changedName);
+			targetNode.getAttributes().setNamedItem(changedItem);
+		} catch (XPathExpressionException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
+	public String[] removeRowName(String name) {
+		ArrayList<String> rowNameArrayList = new ArrayList<String>();
+		try {
+			XPathExpression targetXPath = XPathFactory.newInstance().newXPath()
+					.compile("//*[@name='" + name + "']");
+			XPathExpression targetChildXPath = XPathFactory.newInstance().newXPath()
+					.compile("//*[@name='" + name + "']//item");
+			Node targetNode = (Node) targetXPath.evaluate(document,
+					XPathConstants.NODE);
+			NodeList targetChildNodeList = (NodeList) targetChildXPath.evaluate(document,
+					XPathConstants.NODESET);
+			for(int i = 0; i < targetChildNodeList.getLength(); i++) {
+				System.out.println(targetChildNodeList.item(i).getNodeName());
+				rowNameArrayList.add(targetChildNodeList.item(i).getAttributes().getNamedItem("name").getNodeValue());
+			}
+			if(targetNode.getNodeName().equals("item"))
+				rowNameArrayList.add(targetNode.getAttributes().getNamedItem("name").getNodeValue());
+			targetNode.getParentNode().removeChild(targetNode);
+		} catch (XPathExpressionException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return (String[])rowNameArrayList.toArray(new String[0]);
+	}
 }
